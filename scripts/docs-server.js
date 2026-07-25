@@ -29,13 +29,25 @@ const contentTypes = {
 buildSite();
 
 let rebuildTimer;
-const stylesheetWatcher = watch(join(sourceDirectory, 'styles.css'), () => {
+const scheduleBuild = () => {
   clearTimeout(rebuildTimer);
   rebuildTimer = setTimeout(buildSite, 50);
-});
+};
+const assetWatchers = ['favicon.svg', 'styles.css']
+  .map(file => watch(join(sourceDirectory, file), scheduleBuild));
 
 const server = createServer(async (request, response) => {
   const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
+
+  if (pathname === '/favicon.ico') {
+    response.writeHead(307, {
+      'Cache-Control': 'no-store',
+      Location: '/favicon.svg',
+    });
+    response.end();
+    return;
+  }
+
   const requestedPath = pathname === '/' ? '/index.html' : pathname;
   const filePath = normalize(join(outputDirectory, requestedPath));
 
@@ -69,5 +81,5 @@ server.listen(port, hostname, () => {
 
 server.on('close', () => {
   clearTimeout(rebuildTimer);
-  stylesheetWatcher.close();
+  assetWatchers.forEach(watcher => watcher.close());
 });
