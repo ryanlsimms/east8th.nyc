@@ -2,9 +2,9 @@ import { t } from 'kensington';
 
 const siteUrl = 'https://east8th.nyc/';
 const previewImageUrl = `${siteUrl}social-preview.png`;
-const previewTitle = 'East 8th Backyard Movies · 2026';
-const previewDescription = 'The 2026 East 8th backyard movie schedule.';
-const previewImageAlt = 'East 8th Backyard Movies 2026, illustrated with a movie projector at sunset.';
+const previewTitle = 'East 8th Street';
+const previewDescription = 'The 2026 East 8th St backyard movie schedule.';
+const previewImageAlt = 'East 8th St Backyard Movies 2026';
 
 export default t.head([
   t.meta({ charset: 'utf-8' }),

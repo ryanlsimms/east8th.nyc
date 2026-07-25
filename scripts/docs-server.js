@@ -1,10 +1,11 @@
-import { createReadStream, watch } from 'node:fs';
+import { createReadStream, readFileSync, watch } from 'node:fs';
 import { stat } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { dirname, extname, join, normalize, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { buildSite } from './docs-build.js';
+import { generateSocialPreview } from './docs-social-preview.js';
 
 const scriptsDirectory = dirname(fileURLToPath(import.meta.url));
 const projectDirectory = join(scriptsDirectory, '..');
@@ -33,11 +34,21 @@ const scheduleBuild = () => {
   clearTimeout(rebuildTimer);
   rebuildTimer = setTimeout(buildSite, 50);
 };
-const assetWatchers = ['favicon.svg', 'styles.css']
+const assetWatchers = ['favicon.svg', 'social-preview.png', 'styles.css']
   .map(file => watch(join(sourceDirectory, file), scheduleBuild));
 
 const server = createServer(async (request, response) => {
   const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
+
+  if (pathname === '/__social-preview') {
+    const pageHtml = readFileSync(join(outputDirectory, 'index.html'), 'utf8');
+    response.writeHead(200, {
+      'Cache-Control': 'no-store',
+      'Content-Type': 'text/html; charset=utf-8',
+    });
+    response.end(generateSocialPreview(pageHtml));
+    return;
+  }
 
   if (pathname === '/favicon.ico') {
     response.writeHead(307, {
@@ -77,6 +88,7 @@ const server = createServer(async (request, response) => {
 
 server.listen(port, hostname, () => {
   console.log(`Serving east8th.nyc at http://${hostname}:${port}`);
+  console.log(`Preview Messages card at http://${hostname}:${port}/__social-preview`);
 });
 
 server.on('close', () => {
