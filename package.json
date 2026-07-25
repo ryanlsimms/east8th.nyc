@@ -1,0 +1,20 @@
+{
+  "name": "east8th.nyc",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryanlsimms/east8th.nyc.git"
+  },
+  "license": "UNLICENSED",
+  "author": "Ryan Lee Simms",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "docs": "node --watch scripts/docs-server.js",
+    "docs-build": "node scripts/docs-build.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "kensington": "^2.0.0-signals.23"
+  }
+}
