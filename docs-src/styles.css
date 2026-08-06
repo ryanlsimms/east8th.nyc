@@ -171,8 +171,32 @@ main {
   outline-offset: 5px;
 }
 
+.postponed-banner {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  width: 160%;
+  padding: 0.8rem 0.5rem;
+  color: var(--ink);
+  background: var(--acid);
+  box-shadow: 0 0.45rem 0 var(--shadow);
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  letter-spacing: 0.09em;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
 .screening-details {
   margin-top: 0.5rem;
+}
+
+.screening-postponed .screening-date {
+  text-decoration: line-through;
+  text-decoration-thickness: 0.12em;
 }
 
 .screening-date {

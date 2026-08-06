@@ -1,0 +1,5 @@
+#!/bin/sh
+set -eu
+
+npm run social-preview
+git add docs-src/social-preview.png

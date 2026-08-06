@@ -4,14 +4,15 @@ const posterBaseUrl = 'https://image.tmdb.org/t/p/w500';
 
 export default function screening(movie, index) {
   const tmdbUrl = `https://www.themoviedb.org/movie/${movie.tmdbId}?language=en-US`;
+  const postponedLabel = movie.postponed ? ', postponed' : '';
 
-  return t.article({ class: 'screening' }, [
+  return t.article({ class: movie.postponed ? 'screening screening-postponed' : 'screening' }, [
     t.a({
       class: 'poster-link',
       href: tmdbUrl,
       target: '_blank',
       rel: 'noreferrer',
-      ariaLabel: `View ${movie.title} on TMDB`,
+      ariaLabel: `View ${movie.title}${postponedLabel} on TMDB`,
     }, [
       t.img({
         class: 'poster',
@@ -21,6 +22,9 @@ export default function screening(movie, index) {
         height: 750,
         loading: index < 4 ? 'eager' : 'lazy',
       }),
+      ...(movie.postponed ? [
+        t.span({ class: 'postponed-banner', ariaHidden: 'true' }, 'Postponed'),
+      ] : []),
     ]),
     t.div({ class: 'screening-details' }, [
       t.time({ class: 'screening-date', datetime: movie.date }, [

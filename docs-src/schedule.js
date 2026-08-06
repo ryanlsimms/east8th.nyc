@@ -1,15 +1,5 @@
 export default [
   {
-    date: '2026-07-25',
-    month: 'Jul',
-    day: '25',
-    weekday: 'Saturday',
-    title: 'Gremlins 2: The New Batch',
-    year: '1990',
-    tmdbId: '928-gremlins-2-the-new-batch',
-    poster: '35F5yD7MljvBE2AC0NHAVCoPGEi.jpg',
-  },
-  {
     date: '2026-08-07',
     month: 'Aug',
     day: '07',
@@ -18,6 +8,7 @@ export default [
     year: '2008',
     tmdbId: '7459-speed-racer',
     poster: 'fxRIpx9Op9h71q3tvuabx4GryyP.jpg',
+    postponed: true,
   },
   {
     date: '2026-08-21',
