@@ -1,9 +1,10 @@
 import { createReadStream, existsSync, mkdtempSync, rmSync } from 'node:fs';
-import { stat } from 'node:fs/promises';
+import { copyFile, readFile, stat } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { tmpdir } from 'node:os';
 import { dirname, extname, join, normalize, sep } from 'node:path';
 import { spawn } from 'node:child_process';
+import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 
 import { buildSite } from './docs-build.js';
@@ -76,7 +77,31 @@ const close = () => new Promise((resolve, reject) => {
   server.close(error => error ? reject(error) : resolve());
 });
 
-const runBrowser = (url, profileDirectory) => new Promise((resolve, reject) => {
+const waitForScreenshot = async screenshotPath => {
+  const timeoutAt = Date.now() + 30_000;
+
+  while (Date.now() < timeoutAt) {
+    try {
+      const screenshot = await readFile(screenshotPath);
+      const chunkType = screenshot.subarray(-8, -4).toString('ascii');
+
+      if (chunkType === 'IEND') {
+        return;
+      }
+    } catch (error) {
+      if (error.code !== 'ENOENT') {
+        throw error;
+      }
+    }
+
+    await delay(100);
+  }
+
+  throw new Error('Chrome did not generate the social preview within 30 seconds.');
+};
+
+const runBrowser = async (url, profileDirectory) => {
+  const screenshotPath = join(profileDirectory, 'social-preview.png');
   const browser = spawn(browserPath, [
     '--headless',
     '--disable-background-networking',
@@ -88,7 +113,7 @@ const runBrowser = (url, profileDirectory) => new Promise((resolve, reject) => {
     '--hide-scrollbars',
     '--no-default-browser-check',
     '--no-first-run',
-    `--screenshot=${previewPath}`,
+    `--screenshot=${screenshotPath}`,
     `--user-data-dir=${profileDirectory}`,
     '--virtual-time-budget=5000',
     '--window-size=1200,630',
@@ -97,15 +122,41 @@ const runBrowser = (url, profileDirectory) => new Promise((resolve, reject) => {
     stdio: ['ignore', 'ignore', 'inherit'],
   });
 
-  browser.once('error', reject);
-  browser.once('exit', code => {
-    if (code === 0) {
-      resolve();
-    } else {
-      reject(new Error(`Screenshot browser exited with status ${code}.`));
+  let screenshotReady = false;
+  let forceKillTimer;
+  const browserExit = new Promise((resolve, reject) => {
+    browser.once('error', reject);
+    browser.once('exit', (code, signal) => {
+      clearTimeout(forceKillTimer);
+
+      if (code === 0 || (screenshotReady && signal)) {
+        resolve();
+      } else {
+        reject(new Error(`Screenshot browser exited with status ${code ?? signal}.`));
+      }
+    });
+  });
+
+  const screenshotComplete = waitForScreenshot(screenshotPath).then(() => {
+    screenshotReady = true;
+
+    if (browser.exitCode === null && browser.signalCode === null) {
+      browser.kill('SIGTERM');
+      forceKillTimer = setTimeout(() => browser.kill('SIGKILL'), 1_000);
     }
   });
-});
+
+  try {
+    await Promise.all([browserExit, screenshotComplete]);
+    await copyFile(screenshotPath, previewPath);
+  } finally {
+    clearTimeout(forceKillTimer);
+
+    if (browser.exitCode === null && browser.signalCode === null) {
+      browser.kill('SIGKILL');
+    }
+  }
+};
 
 const profileDirectory = mkdtempSync(join(tmpdir(), 'east8th-social-preview-'));
 

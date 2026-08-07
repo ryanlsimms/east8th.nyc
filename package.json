@@ -10,6 +10,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "prepare": "git config core.hooksPath .githooks",
     "docs": "node --watch scripts/docs-server.js",
     "docs-build": "node scripts/docs-build.js",
     "social-preview": "node scripts/docs-screenshot.js",
