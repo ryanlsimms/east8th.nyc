@@ -1,18 +1,5 @@
 export default [
   {
-    date: '2026-08-08',
-    title: 'Speed Racer',
-    tmdbId: '7459-speed-racer',
-    poster: 'fxRIpx9Op9h71q3tvuabx4GryyP.jpg',
-    postponed: false,
-  },
-  {
-    date: '2026-08-21',
-    title: 'Stuart Little',
-    tmdbId: '10137-stuart-little',
-    poster: '362lcwTJlNyAhitTlp2UraECISR.jpg',
-  },
-  {
     date: '2026-09-11',
     title: 'Back to the Future Part II',
     tmdbId: '165-back-to-the-future-part-ii',
