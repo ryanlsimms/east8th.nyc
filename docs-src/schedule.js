@@ -1,12 +1,12 @@
 export default [
   {
-    date: '2026-09-11',
+    date: '2026-09-12',
     title: 'Back to the Future Part II',
     tmdbId: '165-back-to-the-future-part-ii',
     poster: 'YBawEsTkUZBDajKbd5LiHkmMGf.jpg',
   },
   {
-    date: '2026-09-12',
+    date: '2026-09-18',
     title: 'Back to the Future Part III',
     tmdbId: '196-back-to-the-future-part-iii',
     poster: 'crzoVQnMzIrRfHtQw0tLBirNfVg.jpg',
