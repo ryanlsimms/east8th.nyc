@@ -1,9 +1,9 @@
 export default [
   {
     date: '2026-09-19',
-    title: 'Indiana Jones and the Last Crusade',
-    tmdbId: '89-indiana-jones-and-the-last-crusade',
-    poster: 'sizg1AU8f8JDZX4QIgE4pjUMBvx.jpg',
+    title: 'Terminator 2: Judgment Day',
+    tmdbId: '280-terminator-2-judgment-day',
+    poster: '5M0j0B18abtBI5gi2RhfjjurTqb.jpg',
   },
   // {
   //   date: '2026-09-18',
