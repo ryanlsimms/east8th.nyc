@@ -1,18 +1,7 @@
 export default [
   {
-    date: '2026-09-19',
-    title: 'Terminator 2: Judgment Day',
-    tmdbId: '280-terminator-2-judgment-day',
-    poster: '5M0j0B18abtBI5gi2RhfjjurTqb.jpg',
-  },
-  // {
-  //   date: '2026-09-18',
-  //   title: 'Back to the Future Part III',
-  //   tmdbId: '196-back-to-the-future-part-iii',
-  //   poster: 'crzoVQnMzIrRfHtQw0tLBirNfVg.jpg',
-  // },
-  {
     date: '2026-10-02',
+    rainDate: '2026-10-03',
     title: 'Ghostbusters',
     tmdbId: '620-ghostbusters',
     poster: '7E8nLijS9AwwUEPu2oFYOVKhdFA.jpg',
@@ -36,13 +25,13 @@ export default [
     poster: '6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg',
   },
   {
-    date: '2026-11-07',
+    date: '2026-11-13',
     title: 'The Lord of the Rings: The Two Towers',
     tmdbId: '121-the-lord-of-the-rings-the-two-towers',
     poster: '5VTN0pR8gcqV3EPUHHfMGnJYN9L.jpg',
   },
   {
-    date: '2026-11-13',
+    date: '2026-11-14',
     title: 'The Lord of the Rings: The Return of the King',
     tmdbId: '122-the-lord-of-the-rings-the-return-of-the-king',
     poster: 'rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg',

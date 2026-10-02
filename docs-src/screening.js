@@ -8,6 +8,11 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
   weekday: 'long',
   year: 'numeric',
 });
+const rainDateFormatter = new Intl.DateTimeFormat('en-US', {
+  day: 'numeric',
+  month: 'short',
+  timeZone: 'UTC',
+});
 
 export default function screening(movie, index) {
   const tmdbUrl = `https://www.themoviedb.org/movie/${movie.tmdbId}?language=en-US`;
@@ -38,11 +43,14 @@ export default function screening(movie, index) {
       ] : []),
     ]),
     t.div({ class: 'screening-details' }, [
-      t.time({ class: 'screening-date', datetime: movie.date }, [
+      t.time({ class: movie.rainDate ? 'screening-date screening-date-has-rain' : 'screening-date', datetime: movie.date }, [
         t.span({ class: 'date-weekday' }, dateParts.weekday),
         t.span({ class: 'date-month' }, dateParts.month),
         t.span({ class: 'date-day' }, dateParts.day),
       ]),
+      ...(movie.rainDate ? [
+        t.p({ class: 'screening-rain-date' }, `Rain Date: ${rainDateFormatter.format(new Date(`${movie.rainDate}T00:00:00Z`))}`),
+      ] : []),
       t.div({ class: 'screening-title' }, [
         t.h3(movie.title),
         t.p(dateParts.year),

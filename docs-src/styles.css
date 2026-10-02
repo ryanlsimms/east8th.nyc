@@ -208,6 +208,17 @@ main {
   white-space: nowrap;
 }
 
+.screening-rain-date {
+  margin: 0.1rem 0 0.3rem;
+  color: rgb(var(--cream-rgb) / 72%);
+  font-size:0.85rem;
+  text-align: right;
+}
+
+.screening-date-has-rain {
+  min-height: 0;
+}
+
 .date-month {
   color: var(--orange);
   font-size: 1.12rem;
