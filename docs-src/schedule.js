@@ -1,7 +1,6 @@
 export default [
   {
-    date: '2026-10-02',
-    rainDate: '2026-10-03',
+    date: '2026-10-03',
     title: 'Ghostbusters',
     tmdbId: '620-ghostbusters',
     poster: '7E8nLijS9AwwUEPu2oFYOVKhdFA.jpg',
