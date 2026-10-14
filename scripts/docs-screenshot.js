@@ -119,7 +119,7 @@ const runBrowser = async (url, profileDirectory) => {
     '--window-size=1200,630',
     url,
   ], {
-    stdio: ['ignore', 'ignore', 'inherit'],
+    stdio: 'ignore',
   });
 
   let screenshotReady = false;

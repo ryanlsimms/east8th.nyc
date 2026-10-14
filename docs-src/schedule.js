@@ -1,12 +1,6 @@
 export default [
   {
-    date: '2026-10-03',
-    title: 'Ghostbusters',
-    tmdbId: '620-ghostbusters',
-    poster: '7E8nLijS9AwwUEPu2oFYOVKhdFA.jpg',
-  },
-  {
-    date: '2026-10-16',
+    date: '2026-10-17',
     title: 'Coraline',
     tmdbId: '14836-coraline',
     poster: '4jeFXQYytChdZYE9JYO7Un87IlW.jpg',
