@@ -36,6 +36,7 @@ const scheduleBuild = () => {
 };
 const assetWatchers = ['favicon.svg', 'social-preview.png', 'styles.css']
   .map(file => watch(join(sourceDirectory, file), scheduleBuild));
+assetWatchers.push(watch(join(sourceDirectory, 'renovation'), scheduleBuild));
 
 const server = createServer(async (request, response) => {
   const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
@@ -59,7 +60,7 @@ const server = createServer(async (request, response) => {
     return;
   }
 
-  const requestedPath = pathname === '/' ? '/index.html' : pathname;
+  const requestedPath = pathname.endsWith('/') ? `${pathname}index.html` : pathname;
   const filePath = normalize(join(outputDirectory, requestedPath));
 
   if (filePath !== outputDirectory && !filePath.startsWith(`${outputDirectory}${sep}`)) {
@@ -70,6 +71,17 @@ const server = createServer(async (request, response) => {
 
   try {
     const file = await stat(filePath);
+
+    if (file.isDirectory() && !pathname.endsWith('/')) {
+      const redirectUrl = new URL(request.url, 'http://localhost');
+      redirectUrl.pathname += '/';
+      response.writeHead(308, {
+        'Cache-Control': 'no-store',
+        Location: `${redirectUrl.pathname}${redirectUrl.search}`,
+      });
+      response.end();
+      return;
+    }
 
     if (!file.isFile()) {
       throw new Error('Not a file');
