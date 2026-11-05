@@ -1,6 +1,6 @@
 export default [
   {
-    date: '2026-11-06',
+    date: '2026-11-10',
     title: 'The Lord of the Rings: The Fellowship of the Ring',
     tmdbId: '120-the-lord-of-the-rings-the-fellowship-of-the-ring',
     poster: '6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg',
