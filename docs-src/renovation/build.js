@@ -1,4 +1,5 @@
-import { copyFileSync, cpSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { copyFileSync, cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
 
@@ -13,7 +14,7 @@ import { scopeList } from './scope-list.js';
 
 const require = createRequire(import.meta.url);
 
-function generateHtml(items) {
+function generateHtml(items, stylesheet) {
   return t.htmlWithDocType({ lang: 'en' }, [
     t.head([
       t.meta({ charset: 'utf-8' }),
@@ -22,7 +23,7 @@ function generateHtml(items) {
       t.meta({ name: 'description', content: 'Scope of work for the East 8th St basement renovation, for contractor estimates.' }),
       t.title('Basement Renovation Scope · East 8th St'),
       t.link({ rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }),
-      t.link({ rel: 'stylesheet', href: '/renovation/renovation.css' }),
+      t.link({ rel: 'stylesheet', href: `/renovation/${stylesheet}` }),
       t.script({ type: 'importmap' }, JSON.stringify({
         imports: { kensington: '/renovation/vendor/kensington.js' },
       })),
@@ -53,7 +54,13 @@ export function buildRenovation(sourceDirectory, outputDirectory, items = savedI
   rmSync(basementOutput, { recursive: true, force: true });
   mkdirSync(join(basementOutput, 'vendor'), { recursive: true });
 
-  writeFileSync(join(basementOutput, 'index.html'), generateHtml(items));
+  // The CDN can retain the previous CSS across deploys and ignore query
+  // strings. Change the path whenever its contents change.
+  const css = readFileSync(join(basementSource, 'renovation.css'));
+  const cssHash = createHash('sha256').update(css).digest('hex').slice(0, 16);
+  const stylesheet = `renovation.${cssHash}.css`;
+  writeFileSync(join(basementOutput, stylesheet), css);
+  writeFileSync(join(basementOutput, 'index.html'), generateHtml(items, stylesheet));
   cpSync(join(basementSource, 'photos'), join(basementOutput, 'photos'), { recursive: true });
   // Documents attached to items (PDFs in docs-src/renovation).
   for (const src of new Set(items.flatMap(item => (item.documents ?? []).map(d => d.src)))) {
