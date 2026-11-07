@@ -1,7 +1,16 @@
 import { registerComponents } from 'kensington';
-import { scopeList } from './scope-list.js';
+import { DEFAULT_GROUPING, scopeList } from './scope-list.js';
+import { readGrouping, writeGrouping } from './grouping-url.js';
+import { dimensions } from './dimensions.js';
 
-registerComponents({ scopeList });
+// The page is built with the default grouping; the browser swaps in whatever
+// grouping is in the URL and keeps the URL updated as it changes.
+registerComponents({ scopeList }, {
+  context: {
+    grouping: readGrouping(dimensions, DEFAULT_GROUPING),
+    onGroupingChange: grouping => writeGrouping(grouping, DEFAULT_GROUPING),
+  },
+});
 
 // Group headings stick just below the sticky list options, whose height
 // changes as the options wrap.

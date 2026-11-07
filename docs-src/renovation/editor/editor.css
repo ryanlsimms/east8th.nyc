@@ -1,0 +1,206 @@
+/* Builds on /renovation/renovation.css (tokens, .page-main, .list-options). */
+
+.editor-status {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.editor-actions {
+  display: flex;
+  margin-left: auto;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.editor button {
+  padding: 0.35rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  background: var(--card);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.editor button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.editor button.primary {
+  border-color: var(--ink);
+  color: var(--paper);
+  background: var(--ink);
+}
+
+.editor button.danger {
+  color: var(--warm);
+}
+
+.editor-errors {
+  flex-basis: 100%;
+  margin: 0;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid var(--warm);
+  background: var(--warm-soft);
+  font-size: 0.9rem;
+}
+
+.editor-errors ul {
+  margin: 0.4rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.scope-item {
+  position: relative;
+}
+
+.edit-button {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.45rem;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0 !important;
+  border-color: transparent !important;
+  border-radius: 50% !important;
+  color: var(--muted) !important;
+  background: transparent !important;
+}
+
+.edit-button:hover,
+.edit-button:focus-visible {
+  color: var(--ink) !important;
+  background: var(--accent-soft) !important;
+}
+
+.scope-item:has(.edit-button) .scope-text {
+  padding-right: 2rem;
+}
+
+.edit-item {
+  display: grid;
+  gap: 0.6rem;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.edit-item-bar {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.edit-item-id {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.edit-item-actions {
+  display: flex;
+  gap: 0.35rem;
+  margin-left: auto;
+}
+
+.field {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.field-label,
+.tag-field legend {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--ink);
+  background: var(--paper);
+  font: inherit;
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.field .item-text {
+  font-weight: 500;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 0.6rem;
+}
+
+.tag-fields {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.tag-field {
+  padding: 0;
+}
+
+.tag-field.missing legend {
+  color: var(--warm);
+}
+
+.tag-field.missing legend::after {
+  content: ' — pick at least one';
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chip span {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.chip input:checked + span {
+  border-color: var(--accent);
+  color: var(--ink);
+  background: var(--accent-soft);
+}
+
+.chip input:focus-visible + span {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+@media (max-width: 600px) {
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+}

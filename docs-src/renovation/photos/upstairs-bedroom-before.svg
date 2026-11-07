@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="350 405 790 1130" role="img" aria-labelledby="title desc">
+<title id="title">Before: upstairs bedroom renovation</title>
+<desc id="desc">First-floor plan traced from the supplied screenshot. Bedroom is 8 feet 2 inches wide and 10 feet 1 inch long, with laundry and closet below. Screenshot ends before the rest of the floor. Diagram only, not for construction.</desc>
+<style>
+:root{--paper:#fffdf7;--ink:#14251f;--muted:#5d6a63;--accent:#245743;--soft:#dfeadf;--line:#e2d6c2}
+@media(prefers-color-scheme:dark){:root{--paper:#0d2530;--ink:#f1ead9;--muted:#a9b7b4;--accent:#d9ff5b;--soft:#23402a;--line:#1f3d4a}}
+svg{background:var(--paper);font-family:'DM Sans',system-ui,sans-serif}
+.wall{fill:none;stroke:var(--ink);stroke-width:13;stroke-linejoin:miter}
+.fixture{fill:none;stroke:var(--muted);stroke-width:2}
+.door{fill:none;stroke:var(--muted);stroke-width:2}
+.gap{stroke:var(--paper);stroke-width:17}
+.glass{stroke:var(--accent);stroke-width:4}
+text{fill:var(--ink);text-anchor:middle;font-size:20px}
+.label{font-weight:700} .small{fill:var(--muted);font-size:16px}
+.dim{fill:none;stroke:var(--muted);stroke-width:1.5}
+</style>
+<defs><marker id="arrow" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M8 0 0 4 8 8" fill="none" stroke="var(--muted)"/></marker></defs>
+<path d="M800 807 H888 V691 H980 V780 H1072 V1100 H800 Z" fill="var(--soft)"/>
+<!-- Exterior and common partitions, aligned between the two drawings. -->
+<path class="wall" d="M470 1490 V1200 L398 1050 V890 L462 745 V460 H986 V770 H1072 V1490 M470 1200 H792 M800 460 V687 H888 V807 H800 V1100 H1072 M800 687 H986"/>
+<path class="wall" d="M800 807 H888 V687"/>
+<!-- Kitchen fixtures -->
+<path class="fixture" d="M481 481 H535 V737 H680 V792 H535 V737 H481 Z M481 525 H535 M481 570 H535 M481 615 H535 M481 660 H535 M481 705 H535 M546 747 H609 V781 H546 Z M616 737 V792 M775 705 H868 V795 H775 Z"/>
+<rect class="fixture" x="540" y="572" width="48" height="70"/>
+<rect class="fixture" x="549" y="582" width="30" height="50"/>
+<text class="label" x="658" y="589">Kitchen</text>
+<text class="label" x="605" y="1015">Dining room</text>
+<text class="small" x="605" y="1043">(partial)</text>
+<text class="small" x="893" y="645">Entry</text>
+<!-- Exterior windows -->
+
+<line class="gap" x1="551" y1="460" x2="629" y2="460"/>
+<line class="glass" x1="551" y1="460" x2="629" y2="460"/>
+<line class="gap" x1="684" y1="460" x2="762" y2="460"/>
+<line class="glass" x1="684" y1="460" x2="762" y2="460"/>
+<line class="gap" x1="432" y1="809" x2="410" y2="858"/>
+<line class="glass" x1="432" y1="809" x2="410" y2="858"/>
+<line class="gap" x1="398" y1="910" x2="398" y2="1018"/>
+<line class="glass" x1="398" y1="910" x2="398" y2="1018"/>
+<line class="gap" x1="428" y1="1112" x2="453" y2="1161"/>
+<line class="glass" x1="428" y1="1112" x2="453" y2="1161"/>
+<line class="gap" x1="568" y1="1200" x2="700" y2="1200"/>
+<line class="glass" x1="568" y1="1200" x2="700" y2="1200"/>
+<line class="gap" x1="470" y1="1265" x2="470" y2="1338"/>
+<line class="glass" x1="470" y1="1265" x2="470" y2="1338"/>
+<line class="gap" x1="856" y1="460" x2="948" y2="460"/>
+<path class="door" d="M856 460 V552 A92 92 0 0 0 948 460"/>
+<line class="gap" x1="800" y1="588" x2="800" y2="672"/>
+<path class="door" d="M800 672 H884 A84 84 0 0 0 800 588"/>
+<line class="gap" x1="810" y1="1100" x2="874" y2="1100"/>
+<path class="door" d="M810 1100 V1036 A64 64 0 0 1 874 1100"/>
+<path class="wall" d="M800 1100 V1445 L818 1490 M890 1235 H1072 M890 1235 V1445 H1072 M890 1445 L910 1490"/>
+<line class="gap" x1="890" y1="1290" x2="890" y2="1376"/>
+<path class="door" d="M890 1290 H976 A86 86 0 0 1 890 1376"/>
+<text class="small" x="980" y="1410">Bathroom</text>
+<path class="wall" d="M976 1100 V1223 H890 V1235 M976 1223 H1072"/>
+<rect class="fixture" x="887" y="1128" width="75" height="72"/>
+<text x="925" y="1172">W/D</text>
+<text class="small" x="1024" y="1169">Closet</text>
+<text class="small" x="843" y="1412" transform="rotate(-90 843 1412)">Hall</text>
+<text class="label" x="930" y="938.5">Bedroom</text>
+<text x="930" y="968.5">8′2″ × 10′1″</text>
+<path class="dim" d="M816 845 H1056" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+<text class="small" x="936" y="833">8′2″</text>
+<path class="dim" d="M1038 790 V1088" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+<text class="small" x="1023" y="1023.5" transform="rotate(-90 1023 1023.5)">10′1″</text>
+<path class="dim" stroke-dasharray="6 6" d="M450 1490 H1085"/>
+<text class="small" x="746" y="1520">Plan continues · diagram only</text>
+</svg>
