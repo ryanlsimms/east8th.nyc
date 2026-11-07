@@ -3,7 +3,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import generateHtml from '../docs-src/index.js';
-import { buildBasement } from '../docs-src/renovation/generate.js';
+import { buildRenovation } from '../docs-src/renovation/build.js';
 
 const scriptsDirectory = dirname(fileURLToPath(import.meta.url));
 const projectDirectory = join(scriptsDirectory, '..');
@@ -17,7 +17,7 @@ export function buildSite() {
   copyFileSync(join(sourceDirectory, 'social-preview.png'), join(outputDirectory, 'social-preview.png'));
   copyFileSync(join(sourceDirectory, 'styles.css'), join(outputDirectory, 'styles.css'));
 
-  buildBasement(sourceDirectory, outputDirectory);
+  buildRenovation(sourceDirectory, outputDirectory);
 
   console.log(`Built static site in ${outputDirectory}`);
 }

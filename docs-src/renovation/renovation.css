@@ -1,0 +1,227 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap');
+
+:root {
+  color-scheme: light;
+  --paper: #fbf5e8;
+  --card: #fffdf7;
+  --ink: #14251f;
+  --muted: #5d6a63;
+  --line: #e2d6c2;
+  --accent: #245743;
+  --accent-soft: #dfeadf;
+  --warm: #d94825;
+  --warm-soft: #f8e1d6;
+  --font-body: 'DM Sans', sans-serif;
+  --font-display: 'Archivo Black', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --paper: #071b24;
+    --card: #0d2530;
+    --ink: #f1ead9;
+    --muted: #a9b7b4;
+    --line: #1f3d4a;
+    --accent: #d9ff5b;
+    --accent-soft: #23402a;
+    --warm: #ff6a3d;
+    --warm-soft: #3d2219;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: var(--font-body);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--accent);
+}
+
+.page-main {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 1rem 1rem 0;
+}
+
+/* List options */
+
+.list-options {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2rem;
+  align-items: end;
+  margin-inline: -1rem;
+  padding: 0.75rem 1rem;
+  border-block: 1px solid var(--line);
+  background: var(--paper);
+}
+
+fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+legend {
+  margin-bottom: 0.35rem;
+  padding: 0;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.segmented {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.segment input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.segment span {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+}
+
+.segment input:checked + span {
+  border-color: var(--ink);
+  color: var(--paper);
+  background: var(--ink);
+}
+
+.segment input:focus-visible + span {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Groups */
+
+.item-total {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.group {
+  margin-block: 1.5rem 2.25rem;
+}
+
+.group-heading {
+  position: sticky;
+  /* --options-height is kept in sync with .list-options by client.js */
+  top: calc(var(--options-height, 0px) - 1px);
+  z-index: 1;
+  display: flex;
+  gap: 0.6rem;
+  align-items: baseline;
+  margin: 0 0 0.6rem;
+  padding-block: 0.5rem 0.4rem;
+  background: var(--paper);
+  border-bottom: 2px solid var(--ink);
+  font-size: 1.15rem;
+}
+
+.group-count {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.scope-items {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.scope-item {
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--card);
+}
+
+.scope-item p {
+  margin: 0;
+}
+
+.scope-text {
+  font-weight: 500;
+}
+
+.scope-note,
+.also-in,
+.scope-link {
+  margin-top: 0.2rem !important;
+  font-size: 0.85rem;
+}
+
+.scope-note {
+  color: var(--muted);
+}
+
+.also-in {
+  color: var(--warm);
+  font-size: 0.78rem !important;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tags:empty {
+  display: none;
+}
+
+.tag {
+  padding: 0.1rem 0.5rem;
+  border-radius: 4px;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--line) 55%, transparent);
+  font-size: 0.72rem;
+}
+
+.tag-trade {
+  color: var(--ink);
+  background: var(--accent-soft);
+}
+
+.tag-supply {
+  color: var(--ink);
+  background: var(--warm-soft);
+}
