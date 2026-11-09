@@ -1003,4 +1003,16 @@ export const items = [
       setting: ["interior"],
     },
   },
+  {
+    id: "item-81",
+    text: "Handrail around sunken patio",
+    tags: {
+      trade: ["masonry"],
+      location: ["patio"],
+      phase: ["finish"],
+      supply: ["contractor"],
+      area: ["basement"],
+      setting: ["exterior"],
+    },
+  },
 ];
