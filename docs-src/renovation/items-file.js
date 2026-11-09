@@ -32,8 +32,14 @@ export function validateItems(items) {
     else if (ids.has(item.id)) errors.push(`${name} has duplicate id ${item.id}`);
     ids.add(item.id);
     if (typeof item.text !== 'string' || !item.text.trim()) errors.push(`${name} has no text`);
-    if (item.link && !(typeof item.link.href === 'string' && /^https?:\/\//.test(item.link.href))) {
-      errors.push(`${name} has a link without an http(s) URL`);
+    if (item.links != null && !Array.isArray(item.links)) {
+      errors.push(`${name} links must be an array`);
+    } else {
+      for (const [index, link] of (item.links ?? []).entries()) {
+        if (!(typeof link?.href === 'string' && /^https?:\/\//.test(link.href))) {
+          errors.push(`${name} link #${index + 1} needs an http(s) URL`);
+        }
+      }
     }
     for (const photo of item.photos ?? []) {
       if (typeof photo.src !== 'string' || !/^[\w.-]+$/.test(photo.src)
@@ -53,6 +59,9 @@ export function validateItems(items) {
         errors.push(`${name} has no ${dimension.label.toLowerCase()} selected`);
         continue;
       }
+      if (dimension.exclusive && values.length !== 1) {
+        errors.push(`${name} must have exactly one ${dimension.label.toLowerCase()} selected`);
+      }
       for (const value of values) {
         if (!dimension.values.some(v => v.key === value)) {
           errors.push(`${name} has unknown ${dimension.label.toLowerCase()} "${value}"`);
@@ -67,8 +76,10 @@ export function validateItems(items) {
 export function normalizeItem(item) {
   const text = String(item.text ?? '').trim();
   const note = String(item.note ?? '').trim() || null;
-  const href = String(item.link?.href ?? '').trim();
-  const link = href ? { href, label: String(item.link.label ?? '').trim() || href } : null;
+  const links = (item.links ?? []).map(link => {
+    const href = String(link?.href ?? '').trim();
+    return { href, label: String(link?.label ?? '').trim() || href };
+  }).filter(link => link.href || link.label);
   const tags = Object.fromEntries(dimensions.map(dimension => [
     dimension.key,
     dimension.values.map(v => v.key).filter(key => (item.tags?.[dimension.key] ?? []).includes(key)),
@@ -82,7 +93,7 @@ export function normalizeItem(item) {
     id: item.id,
     text,
     note,
-    link,
+    links: links.length > 0 ? links : null,
     documents: documents.length > 0 ? documents : null,
     photos: photos.length > 0 ? photos : null,
     tags,
@@ -97,7 +108,11 @@ function serializeItem(item) {
     `    text: ${str(item.text)},`,
   ];
   if (item.note) lines.push(`    note: ${str(item.note)},`);
-  if (item.link) lines.push(`    link: { href: ${str(item.link.href)}, label: ${str(item.link.label)} },`);
+  if (item.links?.length) {
+    lines.push('    links: [');
+    for (const link of item.links) lines.push(`      { href: ${str(link.href)}, label: ${str(link.label)} },`);
+    lines.push('    ],');
+  }
   if (item.documents) {
     lines.push('    documents: [');
     for (const document of item.documents) lines.push(`      { src: ${str(document.src)}, label: ${str(document.label)} },`);
@@ -129,7 +144,7 @@ export function writeItems(items) {
     '// (npm run docs, then /renovation/edit) or by hand; tag keys come from',
     '// dimensions.js. An item with several values for a dimension appears in each',
     '// of those groups. Photo files live in docs-src/renovation/photos; document',
-    '// PDFs live in docs-src/renovation.',
+    '// PDFs live in docs-src/renovation. Links use links: [{ href, label }, ...].',
     '',
     'export const items = [',
     ...normalized.map(serializeItem),

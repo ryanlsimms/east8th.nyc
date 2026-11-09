@@ -3,7 +3,7 @@
 // dev server's /renovation/api/items endpoint.
 import { t, signal, computed } from 'kensington';
 import { DEFAULT_GROUPING, scopeItem, scopeView } from '../scope-list.js';
-import { readGrouping, writeGrouping } from '../grouping-url.js';
+import { initializeScopeNavigation, readGrouping, writeGrouping } from '../grouping-url.js';
 
 const API = '/renovation/api/items';
 const NEW_ITEM_TAGS = { supply: ['contractor'], area: ['basement'], setting: ['interior'] };
@@ -86,7 +86,7 @@ function editor({ items: initialItems, dimensions, downloads, revision: initialR
 
   const addItem = () => {
     const tags = Object.fromEntries(dimensions.map(d => [d.key, [...(NEW_ITEM_TAGS[d.key] ?? [])]]));
-    const item = { id: nextId(items), text: '', note: null, link: null, tags };
+    const item = { id: nextId(items), text: '', note: null, links: [], tags };
     items = [...items, item];
     editing.add(item.id);
     markDirty();
@@ -138,19 +138,24 @@ function editor({ items: initialItems, dimensions, downloads, revision: initialR
       }),
   ]);
 
+  let tagFieldId = 0;
   const tagField = (item, dimension) => {
+    const name = `tag-field-${++tagFieldId}`;
     const selected = item.tags[dimension.key];
     return t.fieldset({ class: selected.length === 0 ? 'tag-field missing' : 'tag-field' }, [
       t.legend(dimension.label),
       t.div({ class: 'chips' }, dimension.values.map(value => t.label({ class: 'chip' }, [
         t.input({
-          type: 'checkbox',
+          type: dimension.exclusive ? 'radio' : 'checkbox',
+          name: dimension.exclusive ? name : undefined,
           checked: selected.includes(value.key),
           onchange: event => {
             const list = item.tags[dimension.key];
-            item.tags[dimension.key] = event.target.checked
-              ? [...list, value.key]
-              : list.filter(key => key !== value.key);
+            item.tags[dimension.key] = dimension.exclusive
+              ? [value.key]
+              : event.target.checked
+                ? [...list, value.key]
+                : list.filter(key => key !== value.key);
             event.target.closest('fieldset')
               .classList.toggle('missing', item.tags[dimension.key].length === 0);
             markDirty();
@@ -163,8 +168,8 @@ function editor({ items: initialItems, dimensions, downloads, revision: initialR
 
   const editCard = (item, context) => {
     const index = context.groupItems.indexOf(item);
-    const setLink = (field, value) => {
-      item.link = { href: '', label: '', ...item.link, [field]: value };
+    const setLink = (link, field, value) => {
+      link[field] = value;
       markDirty();
     };
     return t.li({ class: 'scope-item edit-item', 'data-id': item.id }, [
@@ -179,10 +184,22 @@ function editor({ items: initialItems, dimensions, downloads, revision: initialR
       ]),
       textField('Item', item.text, value => { item.text = value; markDirty(); }, { class: 'item-text' }),
       textField('Note', item.note, value => { item.note = value; markDirty(); }, { multiline: true }),
-      t.div({ class: 'field-row' }, [
-        textField('Link URL', item.link?.href, value => setLink('href', value), { type: 'url', placeholder: 'https://' }),
-        textField('Link label', item.link?.label, value => setLink('label', value)),
-      ]),
+      (item.links ?? []).map((link, linkIndex) => t.div({ class: 'link-fields' }, [
+        t.div({ class: 'field-row' }, [
+          textField(`Link ${linkIndex + 1} URL`, link.href, value => setLink(link, 'href', value), { type: 'url', placeholder: 'https://' }),
+          textField(`Link ${linkIndex + 1} label`, link.label, value => setLink(link, 'label', value)),
+        ]),
+        t.button({ type: 'button', onclick: () => {
+          item.links.splice(linkIndex, 1);
+          markDirty();
+          rerender();
+        } }, 'Remove link'),
+      ])),
+      t.div(t.button({ type: 'button', onclick: () => {
+        item.links = [...(item.links ?? []), { href: '', label: '' }];
+        markDirty();
+        rerender();
+      } }, 'Add link')),
       t.div({ class: 'tag-fields' }, dimensions.map(dimension => tagField(item, dimension))),
     ]);
   };
@@ -242,10 +259,7 @@ function editor({ items: initialItems, dimensions, downloads, revision: initialR
 try {
   const data = await load();
   root.replaceChildren(editor(data).toElement());
-  const listOptions = root.querySelector('.list-options');
-  new ResizeObserver(() => {
-    document.documentElement.style.setProperty('--options-height', `${listOptions.offsetHeight}px`);
-  }).observe(listOptions);
+  initializeScopeNavigation();
 } catch (error) {
   root.replaceChildren(t.p({ class: 'editor-errors' }, error.message).toElement());
 }

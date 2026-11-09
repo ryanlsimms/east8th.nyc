@@ -62,6 +62,7 @@ export const dimensions = [
   {
     key: 'supply',
     label: 'Supplied by',
+    exclusive: true,
     values: [
       { key: 'contractor', label: 'Contractor supplies & installs', quiet: true },
       { key: 'owner', label: 'Owner supplies, contractor installs' },

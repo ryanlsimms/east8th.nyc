@@ -2,7 +2,7 @@
 // (npm run docs, then /renovation/edit) or by hand; tag keys come from
 // dimensions.js. An item with several values for a dimension appears in each
 // of those groups. Photo files live in docs-src/renovation/photos; document
-// PDFs live in docs-src/renovation.
+// PDFs live in docs-src/renovation. Links use links: [{ href, label }, ...].
 
 export const items = [
   {
@@ -98,6 +98,22 @@ export const items = [
       trade: ["electrical"],
       location: ["throughout"],
       phase: ["finish"],
+      supply: ["contractor"],
+      area: ["basement"],
+      setting: ["interior"],
+    },
+  },
+  {
+    id: "item-80",
+    text: "Install recessed ceiling lighting as specified on page 4 of the architect’s plans",
+    note: "L2 fixtures; locations and layout per the proposed lighting plan, sheet A-102.00 (page 4).",
+    documents: [
+      { src: "basement-plans-2026-10-29.pdf", label: "Architect’s lighting plan — page 4 (PDF)" },
+    ],
+    tags: {
+      trade: ["electrical"],
+      location: ["throughout"],
+      phase: ["roughIn", "finish"],
       supply: ["contractor"],
       area: ["basement"],
       setting: ["interior"],
@@ -476,11 +492,28 @@ export const items = [
   {
     id: "item-39",
     text: "Build interior walls as per approved plans",
-    link: { href: "https://pacinternationalllc.com/rsic-low-profile-wall-systems/", label: "RSIC low-profile wall & ceiling systems" },
+    links: [
+      { href: "https://pacinternationalllc.com/rsic-low-profile-wall-systems/", label: "RSIC low-profile wall & ceiling systems" },
+    ],
     tags: {
       trade: ["framing"],
       location: ["throughout"],
       phase: ["roughIn"],
+      supply: ["contractor"],
+      area: ["basement"],
+      setting: ["interior"],
+    },
+  },
+  {
+    id: "item-79",
+    text: "Acoustically decouple wall between the recreation room and the rest of the basement",
+    documents: [
+      { src: "basement-acoustic-plan-review.pdf", label: "Acoustic construction details (PDF)" },
+    ],
+    tags: {
+      trade: ["framing", "drywall"],
+      location: ["rec"],
+      phase: ["roughIn", "closeUp"],
       supply: ["contractor"],
       area: ["basement"],
       setting: ["interior"],
@@ -537,7 +570,9 @@ export const items = [
   {
     id: "item-44",
     text: "Ceiling: double layer of acoustically decoupled ⅝″ drywall",
-    link: { href: "https://pacinternationalllc.com/rsic-low-profile-wall-systems/", label: "RSIC low-profile wall & ceiling systems" },
+    links: [
+      { href: "https://pacinternationalllc.com/rsic-low-profile-wall-systems/", label: "RSIC low-profile wall & ceiling systems" },
+    ],
     documents: [
       { src: "basement-acoustic-plan-review.pdf", label: "Acoustic construction details (PDF)" },
     ],
@@ -588,7 +623,7 @@ export const items = [
   },
   {
     id: "item-48",
-    text: "Shower tiling (if not a kit)",
+    text: "Shower tiling",
     tags: {
       trade: ["tile"],
       location: ["fullBath"],
@@ -672,7 +707,12 @@ export const items = [
   },
   {
     id: "item-55",
-    text: "DRIcore or similar subfloor",
+    text: "Subfloor",
+    note: "High R-value subfloor, with option to install nail-down hardwood.  Assume plywood sheathing layer above.",
+    links: [
+      { href: "https://dricore.com/product/dricore-subfloor-r/", label: "DRIcore R+" },
+      { href: "https://alleguard.com/products/construction/rigid-board-insulation/amdry-eco/", label: "Amdry Eco EPS" },
+    ],
     tags: {
       trade: ["flooring"],
       location: ["throughout"],
@@ -684,13 +724,16 @@ export const items = [
   },
   {
     id: "item-56",
-    text: "Engineered reclaimed heart pine flooring",
-    link: { href: "https://uafloors.com/en/product/hudson-heart-pine", label: "UA Floors Hudson Heart Pine" },
+    text: "Engineered heart pine flooring",
+    links: [
+      { href: "https://uafloors.com/en/product/hudson-heart-pine", label: "UA Floors Hudson Reclaimed Heart Pine" },
+      { href: "https://prohardwood.com/products/3-inch-unfinished-engineered-heart-pine-character-flooring?variant=52737077477557", label: "Pro Hardwood Heart Pine" },
+    ],
     tags: {
       trade: ["flooring"],
       location: ["rec", "bedroom", "closets", "family", "kitchenette"],
       phase: ["finish"],
-      supply: ["contractor"],
+      supply: ["owner"],
       area: ["basement"],
       setting: ["interior"],
     },
@@ -801,7 +844,7 @@ export const items = [
       trade: ["demolition", "tile"],
       location: ["upBath"],
       phase: ["demo", "finish"],
-      supply: ["contractor", "owner"],
+      supply: ["owner"],
       area: ["upstairs"],
       setting: ["interior"],
     },

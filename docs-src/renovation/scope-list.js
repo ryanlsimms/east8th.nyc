@@ -116,8 +116,8 @@ export function scopeItem(item, { dimensions, groupings }, extra = null) {
   return t.li({ class: 'scope-item' }, [
     t.p({ class: 'scope-text' }, item.text),
     item.note && t.p({ class: 'scope-note' }, item.note),
-    item.link && t.p({ class: 'scope-link' },
-      t.a({ href: item.link.href, target: '_blank', rel: 'noreferrer' }, `${item.link.label} ↗`)),
+    (item.links ?? []).map(link => t.p({ class: 'scope-link' },
+      t.a({ href: link.href, target: '_blank', rel: 'noreferrer' }, `${link.label || link.href} ↗`))),
     (item.documents?.length > 0 || item.photos?.length > 0) && t.div({ class: 'scope-attachments' }, [
       (item.documents ?? []).map(document => t.a({
         class: 'document-button',
@@ -280,39 +280,44 @@ export function scopeView({
     return resourcesSection(getItems(), downloads);
   });
 
+  // Both layouts share the same signals, so resizing preserves the selection.
+  const groupingPicker = (name, label, selected, initial, onChange, subgroup = false) => {
+    const disabled = key => subgroup
+      ? groupBy.transform(value => value === NONE || value === key, `${name}-${key}-disabled`)
+      : false;
+    return t.fieldset({ class: 'grouping-picker' }, [
+      t.legend(label),
+      t.div({ class: 'segmented' }, options.map(option => t.label({ class: 'segment' }, [
+        t.input({
+          type: 'radio',
+          name,
+          value: option.key,
+          checked: option.key === initial,
+          disabled: disabled(option.key),
+          prop: { checked: selected.transform(value => value === option.key, `${name}-${option.key}-checked`) },
+          onchange: () => onChange(option.key),
+        }),
+        t.span(option.label),
+      ]))),
+      t.div({ class: 'grouping-select' }, t.select({
+        name: `${name}-select`,
+        ariaLabel: label,
+        disabled: subgroup ? groupBy.transform(value => value === NONE, `${name}-disabled`) : false,
+        prop: { value: selected },
+        onchange: event => onChange(event.target.value),
+      }, options.map(option => t.option({
+        value: option.key,
+        selected: option.key === initial,
+        disabled: disabled(option.key),
+      }, option.label)))),
+    ]);
+  };
+
   return t.div({ class: 'scope' }, [
     resources,
     t.form({ class: 'list-options', onsubmit: event => event.preventDefault() }, [
-      t.fieldset({ class: 'group-by' }, [
-        t.legend('Group by'),
-        t.div({ class: 'segmented' }, options.map(option => t.label({ class: 'segment' }, [
-          t.input({
-            type: 'radio',
-            name: 'group-by',
-            value: option.key,
-            checked: option.key === initialGroupBy,
-            prop: { checked: groupBy.transform(v => v === option.key, `checked-${option.key}`) },
-            onchange: () => setGroupBy(option.key),
-          }),
-          t.span(option.label),
-        ]))),
-      ]),
-      t.label({ class: 'then-by' }, [
-        t.span({ class: 'then-by-label' }, 'Subgroup by'),
-        t.select({
-          name: 'then-by',
-          disabled: groupBy.transform(v => v === NONE, 'then-by-disabled'),
-          prop: { value: thenBy },
-          onchange: event => thenBy.set(event.target.value),
-        }, [
-          t.option({ value: NONE, selected: initialThenBy === NONE }, 'None'),
-          ...dimensions.map(d => t.option({
-            value: d.key,
-            selected: d.key === initialThenBy,
-            disabled: groupBy.transform(v => v === d.key, `then-by-${d.key}-disabled`),
-          }, d.label)),
-        ]),
-      ]),
+      groupingPicker('group-by', 'Group by', groupBy, initialGroupBy, setGroupBy),
+      groupingPicker('then-by', 'Subgroup by', thenBy, initialThenBy, key => thenBy.set(key), true),
       t.button({
         type: 'button',
         class: 'download-csv',

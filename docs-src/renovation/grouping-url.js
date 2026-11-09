@@ -31,3 +31,40 @@ export function writeGrouping({ groupBy, thenBy }, defaults) {
   }
   if (url.href !== window.location.href) window.history.replaceState(window.history.state, '', url);
 }
+
+// Run after the grouped list is mounted (including the editor's async load).
+// Native fragment scrolling can run before the URL-selected groups exist.
+export async function initializeScopeNavigation() {
+  if (document.readyState === 'loading') {
+    await new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve, { once: true }));
+  }
+  const listOptions = document.querySelector('.list-options');
+  const updateOffset = () => {
+    if (listOptions) {
+      document.documentElement.style.setProperty('--options-height', `${listOptions.offsetHeight}px`);
+    }
+  };
+  updateOffset();
+  if (listOptions) new ResizeObserver(updateOffset).observe(listOptions);
+
+  const hash = window.location.hash;
+  if (!hash) return;
+  let id;
+  try {
+    id = decodeURIComponent(hash.slice(1));
+  } catch {
+    return;
+  }
+  // Finish loading and font layout before overriding the browser's restored
+  // scroll position. scroll-margin-top accounts for the sticky headings.
+  await Promise.all([
+    document.fonts.ready,
+    document.readyState === 'complete' ? Promise.resolve()
+      : new Promise(resolve => window.addEventListener('load', resolve, { once: true })),
+  ]);
+  requestAnimationFrame(() => {
+    if (window.location.hash !== hash) return;
+    updateOffset();
+    document.getElementById(id)?.scrollIntoView({ block: 'start', behavior: 'instant' });
+  });
+}

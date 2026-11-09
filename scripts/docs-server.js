@@ -208,6 +208,7 @@ const server = createServer(async (request, response) => {
 
 server.listen(port, hostname, () => {
   console.log(`Serving east8th.nyc at http://${hostname}:${port}`);
+  console.log(`Serving removation at http://${hostname}:${port}/renovation`);
   console.log(`Preview Messages card at http://${hostname}:${port}/__social-preview`);
 });
 

@@ -67,10 +67,10 @@ a {
   z-index: 3;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem 2rem;
+  gap: 0.25rem 2rem;
   align-items: center;
   margin-inline: -1rem;
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 1rem;
   border-bottom: 1px solid var(--line);
   background: var(--paper);
 }
@@ -92,33 +92,53 @@ legend {
   text-transform: uppercase;
 }
 
-/* Then by: a compact select so the sticky bar stays short. */
-.then-by {
-  display: flex;
-  gap: 0.6rem;
-  align-items: center;
+/* Matching grouping pickers: pills on desktop, native selects on phones. */
+.grouping-picker {
+  flex: 1 1 auto;
 }
 
-.then-by-label {
-  color: var(--muted);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+.grouping-picker:first-child {
+  flex-basis: 100%;
 }
 
-.then-by select {
-  padding: 0.35rem 0.6rem;
+.grouping-picker legend {
+  float: left;
+  width: 7rem;
+  margin: 0.35rem 0.9rem 0 0;
+}
+
+.grouping-select {
+  display: none;
+  position: relative;
+}
+
+.grouping-select::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+
+.grouping-select select {
+  appearance: none;
+  width: 100%;
+  padding: 0.55rem 2.5rem 0.55rem 0.85rem;
   border: 1px solid var(--line);
   border-radius: 999px;
   color: var(--ink);
   background: var(--card);
   font: inherit;
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 500;
 }
 
-.then-by select:disabled {
+.grouping-select:has(select:disabled) {
   opacity: 0.45;
 }
 
@@ -142,13 +162,6 @@ legend {
   border-color: var(--ink);
 }
 
-/* Label sits to the left of the pills; the pills wrap beside it. On phones
-   it goes back above them. */
-.group-by legend {
-  float: left;
-  margin: 0.55rem 0.9rem 0 0;
-}
-
 @media (max-width: 720px) {
   :root {
     --sticky-offset: 0px;
@@ -162,10 +175,24 @@ legend {
     display: none;
   }
 
+  .grouping-picker,
+  .grouping-picker:first-child {
+    flex: 1 1 0;
+    width: 0;
+  }
 
-  .group-by legend {
+  .grouping-picker legend {
     float: none;
+    width: auto;
     margin: 0 0 0.35rem;
+  }
+
+  .grouping-picker .segmented {
+    display: none;
+  }
+
+  .grouping-select {
+    display: block;
   }
 }
 
@@ -183,7 +210,7 @@ legend {
 
 .segment span {
   display: inline-block;
-  padding: 0.35rem 0.75rem;
+  padding: 0.15rem 0.75rem;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--card);
@@ -197,6 +224,11 @@ legend {
   border-color: var(--ink);
   color: var(--paper);
   background: var(--ink);
+}
+
+.segment input:disabled + span {
+  opacity: 0.45;
+  cursor: default;
 }
 
 .segment input:focus-visible + span {
