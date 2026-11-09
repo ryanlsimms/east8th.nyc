@@ -10,7 +10,7 @@ import { items as savedItems } from './items.js';
 import { validateItems } from './items-file.js';
 import { downloadLinks } from './downloads.js';
 import { PLANS_PDF, planFigure } from './plan-figure.js';
-import { scopeList } from './scope-list.js';
+import { DEFAULT_GROUPING, scopeList } from './scope-list.js';
 
 const require = createRequire(import.meta.url);
 
@@ -32,7 +32,7 @@ function generateHtml(items, stylesheet) {
       t.main({ class: 'page-main' }, [
         planFigure(),
         renderForHydration(scopeList, {
-          items, dimensions, downloads: downloadLinks(items), groupBy: 'phase', thenBy: 'location',
+          items, dimensions, downloads: downloadLinks(items), ...DEFAULT_GROUPING,
         }, 'scopeList'),
       ]),
       t.script({ type: 'module', src: '/renovation/client.js' }),

@@ -4,7 +4,7 @@ import { t, signal, computed, effect } from 'kensington';
 
 const NONE = 'none';
 
-export const DEFAULT_GROUPING = { groupBy: 'phase', thenBy: 'location' };
+export const DEFAULT_GROUPING = { groupBy: 'area', thenBy: 'location' };
 
 // Groups `items` by one dimension. `prefix` keeps subgroup keys (and so their
 // element ids) unique across parent groups.
