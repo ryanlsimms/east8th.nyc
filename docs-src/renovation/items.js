@@ -1,4 +1,4 @@
-// Scope items for /renovation, in display order. Edit with the local editor
+// Scope items for /renovation; file order breaks ties in the tag sort. Edit with the local editor
 // (npm run docs, then /renovation/edit) or by hand; tag keys come from
 // dimensions.js. An item with several values for a dimension appears in each
 // of those groups. Photo files live in docs-src/renovation/photos; document
@@ -814,7 +814,7 @@ export const items = [
   },
   {
     id: "item-62",
-    text: "Kitchenette backsplash",
+    text: "Wet bar backsplash",
     tags: {
       trade: ["tile"],
       location: ["kitchenette"],
@@ -1004,6 +1004,18 @@ export const items = [
     },
   },
   {
+    id: "item-82",
+    text: "Relocate a light switch across the room",
+    tags: {
+      trade: ["electrical"],
+      location: ["secondFloorBedroom"],
+      phase: ["roughIn"],
+      supply: ["contractor"],
+      area: ["upstairs"],
+      setting: ["interior"],
+    },
+  },
+  {
     id: "item-81",
     text: "Handrail around sunken patio",
     tags: {
@@ -1013,6 +1025,32 @@ export const items = [
       supply: ["contractor"],
       area: ["basement"],
       setting: ["exterior"],
+    },
+  },
+  {
+    id: "item-83",
+    text: "Relocate Shower Fixture Location",
+    note: "Move shower fixtures to opposite end of the tub (same side as drain).",
+    tags: {
+      trade: ["plumbing"],
+      location: ["upBath"],
+      phase: ["roughIn"],
+      supply: ["contractor"],
+      area: ["upstairs"],
+      setting: ["interior"],
+    },
+  },
+  {
+    id: "item-84",
+    text: "Upstairs bathroom needs to be accessible until basement bathroom is usable.",
+    note: "We need to have at least one full bathroom usable at all times, so the upstair bathroom renovation should not start until the basement full bathroom is usable",
+    tags: {
+      trade: ["demolition", "plumbing", "tile"],
+      location: ["upBath"],
+      phase: ["demo"],
+      supply: ["contractor"],
+      area: ["upstairs"],
+      setting: ["interior"],
     },
   },
 ];

@@ -140,7 +140,7 @@ export function writeItems(items) {
     throw error;
   }
   const source = [
-    '// Scope items for /renovation, in display order. Edit with the local editor',
+    '// Scope items for /renovation; file order breaks ties in the tag sort. Edit with the local editor',
     '// (npm run docs, then /renovation/edit) or by hand; tag keys come from',
     '// dimensions.js. An item with several values for a dimension appears in each',
     '// of those groups. Photo files live in docs-src/renovation/photos; document',

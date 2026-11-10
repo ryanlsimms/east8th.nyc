@@ -6,6 +6,27 @@ const NONE = 'none';
 
 export const DEFAULT_GROUPING = { groupBy: 'area', thenBy: 'location' };
 
+// Multiple tags use the earliest-ranked value; incomplete editor items sort
+// last. Returning zero for ties preserves their order in items.js.
+export function createItemComparator(dimensions) {
+  const collator = new Intl.Collator('en', { sensitivity: 'base' });
+  const criteria = ['phase', 'area', 'setting', 'location', 'trade', 'supply'].map(key => {
+    const values = [...(dimensions.find(d => d.key === key)?.values ?? [])];
+    if (key === 'location' || key === 'trade') {
+      values.sort((a, b) => collator.compare(a.label, b.label));
+    }
+    const ranks = new Map(values.map((value, index) => [value.key, index]));
+    return item => Math.min(values.length, ...(item.tags[key] ?? []).map(value => ranks.get(value) ?? values.length));
+  });
+  return (a, b) => {
+    for (const rank of criteria) {
+      const difference = rank(a) - rank(b);
+      if (difference) return difference;
+    }
+    return 0;
+  };
+}
+
 // Groups `items` by one dimension. `prefix` keeps subgroup keys (and so their
 // element ids) unique across parent groups.
 function groupItems(items, dimension, prefix = '') {
@@ -253,6 +274,7 @@ export function scopeView({
   const groupBy = signal(initialGroupBy);
   const thenBy = signal(initialThenBy);
   const options = [...dimensions.map(d => ({ key: d.key, label: d.label })), { key: NONE, label: 'None' }];
+  const compareItems = createItemComparator(dimensions);
 
   // Browser only: lets the page remember the grouping (see grouping-url.js).
   if (onGroupingChange) {
@@ -268,7 +290,8 @@ export function scopeView({
     version?.get();
     const dimension = dimensions.find(d => d.key === groupBy.get());
     const subDimension = dimension ? dimensions.find(d => d.key === thenBy.get()) : undefined;
-    return { dimension, subDimension, groups: groupTree(getItems(), dimension, subDimension) };
+    const sortedItems = [...getItems()].sort(compareItems);
+    return { dimension, subDimension, groups: groupTree(sortedItems, dimension, subDimension) };
   });
   const total = computed(() => {
     version?.get();

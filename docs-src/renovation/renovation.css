@@ -443,14 +443,75 @@ html {
   font-size: 0.72rem;
 }
 
-.tag-trade {
-  color: var(--ink);
-  background: var(--accent-soft);
+/* Paul Tol's Bright qualitative palette (six chromatic colors):
+   https://sronpersonalpages.nl/~pault/data/colourschemes.pdf
+   Shared by badges, desktop filters, and mobile selects.
+   Keep this treatment together so the color experiment is easy to revert. */
+.tag-trade,
+.segment:has(input[value="trade"]),
+.grouping-select:has(option[value="trade"]:checked) {
+  --dimension-color: #4477aa;
+  --dimension-ink: #fff;
 }
 
-.tag-supply {
-  color: var(--ink);
-  background: var(--warm-soft);
+.tag-location,
+.segment:has(input[value="location"]),
+.grouping-select:has(option[value="location"]:checked) {
+  --dimension-color: #aa3377;
+  --dimension-ink: #fff;
+}
+
+.tag-phase,
+.segment:has(input[value="phase"]),
+.grouping-select:has(option[value="phase"]:checked) {
+  --dimension-color: #ccbb44;
+  --dimension-ink: #14251f;
+}
+
+.tag-supply,
+.segment:has(input[value="supply"]),
+.grouping-select:has(option[value="supply"]:checked) {
+  --dimension-color: #ee6677;
+  --dimension-ink: #14251f;
+}
+
+.tag-area,
+.segment:has(input[value="area"]),
+.grouping-select:has(option[value="area"]:checked) {
+  --dimension-color: #228833;
+  --dimension-ink: #fff;
+}
+
+.tag-setting,
+.segment:has(input[value="setting"]),
+.grouping-select:has(option[value="setting"]:checked) {
+  --dimension-color: #66ccee;
+  --dimension-ink: #14251f;
+}
+
+.tag,
+.segment:has(input:not([value="none"])) span,
+.grouping-select:has(option:checked:not([value="none"])) select {
+  color: var(--dimension-ink);
+  background: var(--dimension-color);
+  border-color: var(--dimension-color);
+}
+
+.segment:has(input:not([value="none"])) input:checked + span {
+  color: var(--dimension-ink);
+  background: var(--dimension-color);
+  border-color: var(--dimension-color);
+  font-weight: 700;
+  box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--ink);
+}
+
+.segment input:focus-visible + span {
+  outline-color: var(--ink);
+  outline-offset: 5px;
+}
+
+.grouping-select {
+  color: var(--dimension-ink, var(--ink));
 }
 
 /* Floor plan */

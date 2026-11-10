@@ -117,7 +117,7 @@ export const planSvg = `<svg class="plan-svg" viewBox="260 660 3840 1230" role="
 <g class="plan-fixtures">
   ${treads(3250, 1590, 3500, 1740, 6, true)}
   <rect x="3040" y="1450" width="465" height="110"/>
-  <text class="plan-fixture-label" x="3272" y="1515">Kitchenette</text>
+  <text class="plan-fixture-label" x="3272" y="1515">Wet bar</text>
   <rect x="2502" y="1745" width="118" height="88"/>
   <rect x="2835" y="1714" width="116" height="118"/>
   <text class="plan-fixture-label" x="2726" y="1700">Laundry</text>

@@ -2,7 +2,7 @@
 // a pencil on each card that turns it into a form. Loads and saves through the
 // dev server's /renovation/api/items endpoint.
 import { t, signal, computed } from 'kensington';
-import { DEFAULT_GROUPING, scopeItem, scopeView } from '../scope-list.js';
+import { DEFAULT_GROUPING, createItemComparator, scopeItem, scopeView } from '../scope-list.js';
 import { initializeScopeNavigation, readGrouping, writeGrouping } from '../grouping-url.js';
 
 const API = '/renovation/api/items';
@@ -62,10 +62,11 @@ function editor({ items: initialItems, dimensions, downloads, revision: initialR
     rerender();
   };
 
-  // Moves within the current group by swapping places with the neighbour.
+  const compareItems = createItemComparator(dimensions);
+  // Manual ordering only applies to items tied under the automatic sort.
   const moveItem = (item, groupItems, offset) => {
     const neighbour = groupItems[groupItems.indexOf(item) + offset];
-    if (!neighbour) return;
+    if (!neighbour || compareItems(item, neighbour) !== 0) return;
     const next = [...items];
     const a = next.indexOf(item);
     const b = next.indexOf(neighbour);
@@ -176,8 +177,8 @@ function editor({ items: initialItems, dimensions, downloads, revision: initialR
       t.div({ class: 'edit-item-bar' }, [
         t.span({ class: 'edit-item-id' }, item.id),
         t.div({ class: 'edit-item-actions' }, [
-          t.button({ type: 'button', title: 'Move up in this group', disabled: index <= 0, onclick: () => moveItem(item, context.groupItems, -1) }, '↑'),
-          t.button({ type: 'button', title: 'Move down in this group', disabled: index === context.groupItems.length - 1, onclick: () => moveItem(item, context.groupItems, 1) }, '↓'),
+          t.button({ type: 'button', title: 'Move up among items with the same sort priority', disabled: index <= 0 || compareItems(item, context.groupItems[index - 1]) !== 0, onclick: () => moveItem(item, context.groupItems, -1) }, '↑'),
+          t.button({ type: 'button', title: 'Move down among items with the same sort priority', disabled: index === context.groupItems.length - 1 || compareItems(item, context.groupItems[index + 1]) !== 0, onclick: () => moveItem(item, context.groupItems, 1) }, '↓'),
           t.button({ type: 'button', class: 'danger', onclick: () => deleteItem(item) }, 'Delete'),
           t.button({ type: 'button', onclick: () => closeItem(item) }, 'Done'),
         ]),
