@@ -57,11 +57,6 @@ function editor({ items: initialItems, dimensions, downloads, revision: initialR
     focusEditor(item.id);
   };
 
-  const closeItem = item => {
-    editing.delete(item.id);
-    rerender();
-  };
-
   const compareItems = createItemComparator(dimensions);
   // Manual ordering only applies to items tied under the automatic sort.
   const moveItem = (item, groupItems, offset) => {
@@ -77,12 +72,19 @@ function editor({ items: initialItems, dimensions, downloads, revision: initialR
     focusEditor(item.id);
   };
 
-  const deleteItem = item => {
+  const deleteItem = async item => {
+    if (saving.get()) return;
     if (!confirm(`Delete "${item.text || 'untitled item'}"?`)) return;
+    const previousItems = items;
     items = items.filter(i => i !== item);
     editing.delete(item.id);
     markDirty();
     rerender();
+    if (!await save()) {
+      items = previousItems;
+      editing.add(item.id);
+      rerender();
+    }
   };
 
   const addItem = () => {
@@ -96,8 +98,9 @@ function editor({ items: initialItems, dimensions, downloads, revision: initialR
   };
 
   const save = async () => {
-    if (saving.get()) return;
+    if (saving.get()) return false;
     saving.set(true);
+    root.inert = true;
     status.set('Saving…');
     errors.set([]);
     try {
@@ -110,7 +113,7 @@ function editor({ items: initialItems, dimensions, downloads, revision: initialR
       if (!response.ok) {
         errors.set(body.errors ?? ['Save failed']);
         status.set('Not saved');
-        return;
+        return false;
       }
       items = body.items;
       revision = body.revision;
@@ -118,10 +121,13 @@ function editor({ items: initialItems, dimensions, downloads, revision: initialR
       dirty.set(false);
       status.set('Saved to items.js. Commit and push to deploy.');
       rerender();
+      return true;
     } catch (error) {
       errors.set([error.message]);
       status.set('Not saved');
+      return false;
     } finally {
+      root.inert = false;
       saving.set(false);
     }
   };
@@ -180,7 +186,12 @@ function editor({ items: initialItems, dimensions, downloads, revision: initialR
           t.button({ type: 'button', title: 'Move up among items with the same sort priority', disabled: index <= 0 || compareItems(item, context.groupItems[index - 1]) !== 0, onclick: () => moveItem(item, context.groupItems, -1) }, '↑'),
           t.button({ type: 'button', title: 'Move down among items with the same sort priority', disabled: index === context.groupItems.length - 1 || compareItems(item, context.groupItems[index + 1]) !== 0, onclick: () => moveItem(item, context.groupItems, 1) }, '↓'),
           t.button({ type: 'button', class: 'danger', onclick: () => deleteItem(item) }, 'Delete'),
-          t.button({ type: 'button', onclick: () => closeItem(item) }, 'Done'),
+          t.button({
+            type: 'button',
+            class: 'primary',
+            disabled: saving,
+            onclick: save,
+          }, computed(() => saving.get() ? 'Saving…' : 'Done')),
         ]),
       ]),
       textField('Item', item.text, value => { item.text = value; markDirty(); }, { class: 'item-text' }),
@@ -230,12 +241,6 @@ function editor({ items: initialItems, dimensions, downloads, revision: initialR
       t.span({ class: 'editor-status', role: 'status' }, status),
       t.a({ href: '/renovation/', target: '_blank' }, 'View page ↗'),
       t.button({ type: 'button', onclick: addItem }, 'Add item'),
-      t.button({
-        type: 'button',
-        class: 'primary',
-        disabled: computed(() => !dirty.get() || saving.get()),
-        onclick: save,
-      }, computed(() => (saving.get() ? 'Saving…' : dirty.get() ? 'Save' : 'Saved'))),
     ]),
     errors.transform(list => (list.length === 0 ? null : t.div({ class: 'editor-errors', role: 'alert' }, [
       t.strong('Fix these before saving:'),

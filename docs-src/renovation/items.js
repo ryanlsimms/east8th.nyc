@@ -92,6 +92,19 @@ export const items = [
     },
   },
   {
+    id: "item-85",
+    text: "Install smoke detectors — one in each room",
+    note: "Smoke detectors are not yet specified in the plans.",
+    tags: {
+      trade: ["electrical"],
+      location: ["throughout"],
+      phase: ["roughIn", "finish"],
+      supply: ["contractor"],
+      area: ["basement"],
+      setting: ["interior"],
+    },
+  },
+  {
     id: "item-9",
     text: "Flush-mount ceiling lighting",
     tags: {
@@ -941,7 +954,12 @@ export const items = [
   {
     id: "item-69",
     text: "Combine two windows into one large picture window",
-    note: "The window should open with gas struts outward and up in one piece.",
+    note: "Window should be installed before patio excavation.\n\nExisting outside casing measures roughly 80″ wide × 61″ high.  Specify one manually operated, triple-glazed sash that opens up and out on gas struts, with a concealed retractable insect screen. The opening is approximately 9 feet above the sunken patio. Window guard installed if necessary.",
+    links: [
+      { href: "https://www.optvue.com/gas-strut-window", label: "OPTVUE Thruvue Infinity Gas Strut Window" },
+      { href: "https://activwall.com/products/gas-strut-windows/", label: "ActivWall Gas Strut Window" },
+      { href: "https://gaguards.com/pages/window-guard-specifications", label: "Guardian Angel window guard specifications" },
+    ],
     photos: [
       { src: "kitchen-window-current.jpg", caption: "Current: two double-hung windows" },
       { src: "kitchen-window-mockup.jpg", caption: "AI Mock-up: one large picture window" },
